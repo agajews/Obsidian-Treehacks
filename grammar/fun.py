@@ -9,7 +9,6 @@ body_grammar = Grammar()
 body_grammar.add_rule('start', [Name('stmtlist'), EOF()])
 body_grammar.add_rules(core_grammar.slice_rule('stmtlist'))
 
-# print('Compiling body parser')
 body_parser = body_grammar.compile()
 
 header_grammar = Grammar()
@@ -18,12 +17,10 @@ header_grammar.add_rule('start', [Name('signature'), EOF()])
 header_grammar.add_rule('signature', [('name', Name('identifier')), ('params', Name('params'))])
 header_grammar.add_rule('params', wrap('(', [Gather(Literal(','), Name('identifier'))], ')'))
 
-# print('Compiling header parser')
 header_parser = header_grammar.compile()
 
 
 def parse_ops(ast, context):
-    # op_parser = context.op_grammar.compile()
     if isinstance(ast, PartialBinaryExpr):
         return context.op_parser.parse(ast.exprs)
     return ast
@@ -31,11 +28,7 @@ def parse_ops(ast, context):
 
 def process_fun(header, body, ext_context, global_context):
     header = header_parser.parse(header)
-    # print('Function body')
-    # print(body)
-    # print('Compiling body')
     body = body_parser.parse(body, trace=False)
-    # print('Done')
 
     name = header.name
 

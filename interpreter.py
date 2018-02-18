@@ -1,8 +1,6 @@
 import tatsu
-# from tatsu.model import NodeWalker
 from argparse import ArgumentParser
 from preprocessor import preprocess
-# from grammars.core import CoreParser
 from grammar.core import core_grammar
 from grammar.fun import process_fun, parse_ops
 from grammar.model import PartialBinaryExpr, Block, cata
@@ -34,7 +32,7 @@ op_grammar.add_op('>=', 'chain', 4)
 op_grammar.add_op('&&', 'right', 3)
 op_grammar.add_op('||', 'right', 3)
 
-# op_parser = op_grammar.compile()
+op_parser = op_grammar.compile()
 
 class Keyword:
     def __init__(self, header_parser, body_parser, process_fn):
@@ -44,24 +42,10 @@ class Keyword:
 
 keywords = {'fun': process_fun}
 
-# parser = Parser(core_grammar, op_grammar, PartialBinaryExpr)
-
-# def parse(text):
-#     text, line_nums, indent_str = preprocess(text)
-#     print(text)
-#     # model = core_parser.parse(text, semantics=Semantics(), trace=False)
-#     model = core_parser.parse(text, trace=False)
-#     model = cata(model, parse_ops)
-#     print('=' * 50)
-#     for stmt in model:
-#         print(stmt)
-
-
 def interpret(text):
-    # program = parse(text)
     text, line_nums, indent_str = preprocess(text)
     program = core_parser.parse(text, trace=False)
-    context = Context(op_grammar.compile(), keywords)
+    context = Context(op_parser, keywords)
     for stmt in program:
         if isinstance(stmt, Block):
             context.keywords[stmt.keyword](stmt.header, stmt.body, context, context)
