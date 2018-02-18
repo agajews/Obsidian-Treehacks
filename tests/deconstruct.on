@@ -1,0 +1,8 @@
+x = ("hi", "bye", "hi again")
+single = (3,)
+(a,) = single
+empty = ()
+y, z = x
+(y, z) = x
+[y:z] = [1, 2, 3]
+{x -> y} = {"key" -> "value"}

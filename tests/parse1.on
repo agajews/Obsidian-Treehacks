@@ -1,0 +1,13 @@
+fun hello(name)
+    print("Hello " + name)
+
+fun nested(x, y)
+    fun add_two(z)
+        z + 2
+    x - add_two(y)
+
+guy = "Steve"
+hello(guy)
+
+x = 4
+nested(2, x)  # should be -4

@@ -1,0 +1,73 @@
+@@grammar :: Core
+
+start = program $ ;
+
+program = stmtlist ;
+
+indent = /#\[INDENT\]#/ ;
+dedent = /#\[DEDENT\]#/ ;
+endl = /#\[ENDL\]#/ ;
+
+identifier::Identifier = /[_a-zA-Z][_a-zA-Z0-9]*[?!]?/ ;
+int::Int = /[0-9]+/ ;
+float::Float = /([0-9]+)|([0-9]+\.[0-9]*)|(\.[0-9]+)/ ;
+char::Char = /'([^'\\]|\\.)'/ ;
+string::String = /"([^"\\]|\\.)*"/ ;
+symbol::Symbol = '~' @:/[a-zA-Z][a-zA-Z0-9]*[?!]?/ ;
+
+atom = identifier
+     | int
+     | float
+     | char
+     | string
+     | symbol
+     ;
+
+trailer = surrounder:'(' ~ contents:chunk ')'
+        | surrounder:'[' ~ contents:chunk ']'
+        | surrounder:'{' ~ contents:chunk '}'
+        ;
+
+trailerexpr = name:identifier trailers:{trailer}+ ;
+
+tuple = '(' ')' | '(' ~ first:expr ',' contents:','.{expr} ')' ;
+
+collection = surrounder:'[' ~ contents:chunk ']'
+           | surrounder:'{' ~ contents:chunk '}'
+           ;
+
+op::Op = /[-@$%^&*+~<>\/:][-@$%^&*+<>\/=:]*/ ;
+
+atomexpr = trailerexpr | atom | '(' @:expr ')' | tuple | collection ;
+unaryexpr = op:('!' | '-') expr:atomexpr | subexpr:atomexpr ;
+binaryexpr = (op)%{unaryexpr}+ ;
+expr = binaryexpr ;
+
+separator = ',' | ';' ;
+
+lexeme = atom
+       | op
+       | separator
+       ;
+
+bundle = {lexeme}+ ;
+chunk = {surrounded | bundle}+ ;
+surrounded = left:'(' contents:chunk right:')'
+           | left:'[' contents:chunk right:']'
+           | left:'{' contents:chunk right:'}'
+           ;
+
+chunkstmt = chunk endl ;
+block = keyword:identifier header:[chunk] endl indent ~ body:{block | chunkstmt}+ dedent ;
+
+target = parenstarget | tupletarget | collectiontarget ;
+parenstarget = '(' ~ first:(parenstarget | identifier) ',' contents:','.{parenstarget | identifier} ')' ;
+tupletarget = ','.{parenstarget | identifier}+ ;
+collectiontarget = collection ;
+
+assignment = target:target '=' ~ expr:expr endl ;
+
+emptystmt::EmptyStmt = endl | 'pass' ~ endl ;
+stmt = block | assignment | emptystmt | @:expr endl ;
+
+stmtlist = {stmt} ;

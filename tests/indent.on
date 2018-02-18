@@ -1,0 +1,16 @@
+#[comment]#
+fun test_fun(arg1,#[this is a comment#[
+this is a nested comment #this is a line comment#this is another line comment
+]##this is a third line comment]#arg2
+    arg3)
+    print("Hello")
+    for i in [1, 2, 3] #[
+
+    ]#
+        print(
+        i)
+
+fun test_fun2(
+
+            )
+    print("Goodbye")
