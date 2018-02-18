@@ -61,7 +61,7 @@ def interpret(text):
     # program = parse(text)
     text, line_nums, indent_str = preprocess(text)
     program = core_parser.parse(text, trace=False)
-    context = Context(op_grammar, keywords)
+    context = Context(op_grammar.compile(), keywords)
     for stmt in program:
         if isinstance(stmt, Block):
             context.keywords[stmt.keyword](stmt.header, stmt.body, context, context)

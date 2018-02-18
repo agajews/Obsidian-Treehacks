@@ -1,7 +1,7 @@
 
 class Context:
-    def __init__(self, op_grammar, keywords, functions):
-        self.op_grammar = op_grammar
+    def __init__(self, op_parser, keywords):
+        self.op_parser = op_parser
         self.keywords = keywords
 
 

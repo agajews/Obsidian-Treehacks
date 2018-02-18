@@ -23,9 +23,9 @@ header_parser = header_grammar.compile()
 
 
 def parse_ops(ast, context):
-    op_parser = context.op_grammar.compile()
+    # op_parser = context.op_grammar.compile()
     if isinstance(ast, PartialBinaryExpr):
-        return op_parser.parse(ast.exprs)
+        return context.op_parser.parse(ast.exprs)
     return ast
 
 
@@ -39,7 +39,7 @@ def process_fun(header, body, ext_context, global_context):
 
     name = header.name
 
-    context = Context(ext_context.op_grammar, ext_context.keywords)
+    context = Context(ext_context.op_parser, ext_context.keywords)
     
     print('FUNCTION {}'.format(name))
     for stmt in body:
