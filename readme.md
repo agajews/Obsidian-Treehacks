@@ -41,6 +41,7 @@ I spent about two hours this morning finding a bug in the parser generator libra
 So far, I've only made the interpreter for the language. The next step will be to write the first generative programming library and demonstrate the power of keyword definition and dynamic syntax.
 
 ## What does Obsidian look like
+**Apologies for the lack of syntax highlighting, for obvious reasons**
 ```
 #[
 this is a multiline comment
