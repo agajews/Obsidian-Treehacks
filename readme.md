@@ -330,6 +330,34 @@ main
 
 # main will treat its contents as the body of a proc, verify it according to all verifications that have been registered by imports, and compile it to a file with the same basename as the source file (and a .py extention instead of .on)
 
+# of course, manually walking the whole program tree to verify something simple like that is overkill
+# this works much more straightforwardly:
+
+module websockets
+    object Websocket
+        @@initialized = false  # the @@ operator accesses attributes of the expression object that represents the instantiated websocket
+        # some implementation goes here
+        def initialize!()
+            if not guarantee(not @@initialized)  # @@initialized can be an expression representing dependency on other values
+                # guarantee tries to prove that the statement will be true and returns false if it can't (or if it can prove the inverse)
+                throw Error("Websocket might already be initialized!")
+            # some more implementation
+        def open!()
+            if not guarantee(@@initialized)
+                throw Error("Websocket might not be initialized!")
+
+
+# in the same way, we can make sure we never call head() on an empty list
+module list
+    object List
+        @@length = 0
+        def append!()
+            @@length += 1
+            ...
+        def head()
+            if not guarantee(@@length > 0)
+                throw Error("Length not guaranteed to be positive!")
+
 
 # generative programming makes a lot of sense for web programming, where programs are compiled to multiple languages (but still written solely in obsidian) and verification can go beyond type checking
 # it also makes sense in a deep learning context, where programs that are compiled to a single cuda file and compiled with nvcc will be significantly faster than those constructed in python and hindered by python's slow loops
