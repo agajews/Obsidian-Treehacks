@@ -31,6 +31,8 @@ class vector(data)
         n
 ```
 
+Such a library would accomplish this by defining the `class` keyword that gets to parse the block that follows it however it likes.
+
 ## What it does
 Obsidian lets users define new keywords, essentially multiline macros with minimal boilerplate syntax, which means we can have a separate keyword for Obsidian functions and for functions that represent a chunk of code in the target language. Keywords also receive a raw lexeme stream, which means that they have the liberty to use their own syntax entirely; if a generative programming library designer wished, they could even come close to closely imitating the syntax of the target language!
 
